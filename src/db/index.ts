@@ -1,6 +1,7 @@
 import {Pool, QueryConfig, QueryResult, QueryResultRow} from 'pg';
 
 //Initial connection TBC
+//Jungmee move to env
 const pool = new Pool({
   user: 'butler1',
   host: 'localhost',
