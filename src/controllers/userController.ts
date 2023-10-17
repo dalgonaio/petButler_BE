@@ -1,12 +1,14 @@
 import {Request, Response} from 'express';
 import asyncHandler from 'express-async-handler';
+import {query} from '../db';
 
 //@desc Get all users
 //@route GET /users
 //@access public < Jungmee change this once you add authentication
 
 export const getUsers = asyncHandler(async (req: Request, res: Response) => {
-  res.status(200).json({message: 'Get all users, love!'});
+  const result = await query('SELECT * FROM users');
+  res.status(200).json(result.rows);
 });
 
 //@desc create 1 new user
