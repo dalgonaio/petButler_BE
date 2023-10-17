@@ -4,12 +4,12 @@ import {getUsers, createUser, getSingleUser, editUser, deleteUser} from '../cont
 
 //Get all
 router.route('/')
-  .get(getUsers);
+  .get(getUsers)
+  .post(createUser);
 
 //Get, create, edit, delete specific user
 router.route('/:id')
   .get(getSingleUser)
-  .post(createUser)
   .put(editUser)
   .delete(deleteUser);
 
