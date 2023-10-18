@@ -1,13 +1,15 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import {Pool, QueryConfig, QueryResult, QueryResultRow} from 'pg';
 
-//Initial connection TBC
-//Jungmee move to env
+//Initial connection
 const pool = new Pool({
-  user: 'butler1',
-  host: 'localhost',
-  database: 'pet_butler',
-  password: 'cats123',
-  port: 5432,
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_DATABASE,
+  password: process.env.DB_PASSWORD,
+  port: parseInt(process.env.DB_PORT || '5432', 10),
 });
 
 export const query = async <T extends QueryResultRow = any>(

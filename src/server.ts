@@ -1,9 +1,11 @@
-import express, {Request, Response} from 'express';
+import dotenv from 'dotenv';
+dotenv.config();
+
+console.log('Loaded environment variables:', process.env);
+
+import express from 'express';
 import userRoutes from './routes/userRoutes';
 import {errorHandler} from './middleware/errorHandler';
-
-//DB
-import {query} from './db/index';
 
 const app = express();
 const port = process.env.PORT || 3000;
