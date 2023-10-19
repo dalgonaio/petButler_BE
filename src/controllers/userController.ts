@@ -23,7 +23,16 @@ export const createUser = asyncHandler(async (req: Request, res: Response) => {
     throw new Error('All fields are mandatory to create a user.');
   }
 
-  res.status(201).json({message: 'Love, you created a new user!'});
+  const queryText = `INSERT INTO users (first_name, last_name, email)
+     VALUES ($1, $2, $3)
+     RETURNING *;`;
+
+  const values = [firstName, lastName, email];
+
+  const result = await query(queryText, values);
+
+  const returnMessage = result.rows[0];
+  res.status(201).json({message: returnMessage});
 });
 
 //@desc get 1 user
@@ -31,7 +40,10 @@ export const createUser = asyncHandler(async (req: Request, res: Response) => {
 //@access public < Jungmee change this once you add authentication
 
 export const getSingleUser = async (req: Request, res: Response) => {
-  res.status(200).json({message: `Love, you got info for user ${req.params.id}`});
+  const id = Number(req.params.id);
+  const queryText = 'SELECT * FROM users WHERE user_id = $1';
+  const result = await query(queryText, [id]);
+  res.status(200).json({message: result.rows[0]});
 };
 
 //@desc edit 1 existing user
@@ -46,7 +58,17 @@ export const editUser = asyncHandler(async (req: Request, res: Response) => {
     throw new Error('No changed data was presented.');
   }
 
-  res.status(201).json({message: 'Love, you updated a user!'});
+  const id = Number(req.params.id);
+
+  const queryText = `
+      UPDATE users
+      SET first_name = $1, last_name = $2, email = $3
+      WHERE user_id = $4
+      RETURNING *;
+    `;
+  const result = await query(queryText, [firstName, lastName, email, id]);
+
+  res.status(200).json({message: result.rows[0]});
 });
 
 //@desc delete 1 existing user
@@ -54,5 +76,13 @@ export const editUser = asyncHandler(async (req: Request, res: Response) => {
 //@access public < Jungmee change this once you add authentication
 
 export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
-  res.status(200).json({message: `Love, you deleted user ${req.params.id}`});
+  const id = Number(req.params.id);
+
+  const queryText = `
+      DELETE from users
+      WHERE user_id = $1
+      RETURNING *;
+    `;
+  const result = await query(queryText, [id]);
+  res.status(200).json({message: result.rows[0]});
 });
