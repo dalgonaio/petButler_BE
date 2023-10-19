@@ -1,4 +1,4 @@
-import {Request, Response} from 'express';
+import {NextFunction, Request, Response} from 'express';
 import asyncHandler from 'express-async-handler';
 import {query} from '../db';
 
@@ -15,7 +15,7 @@ export const getUsers = asyncHandler(async (req: Request, res: Response) => {
 //@route POST /users/
 //@access public < Jungmee change this once you add authentication
 
-export const createUser = asyncHandler(async (req: Request, res: Response) => {
+export const createUser = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const {firstName, lastName, email} = req.body;
 
   if (!firstName || !lastName || !email) {
@@ -23,16 +23,26 @@ export const createUser = asyncHandler(async (req: Request, res: Response) => {
     throw new Error('All fields are mandatory to create a user.');
   }
 
-  const queryText = `INSERT INTO users (first_name, last_name, email)
+  try {
+    const queryText = `INSERT INTO users (first_name, last_name, email)
      VALUES ($1, $2, $3)
      RETURNING *;`;
 
-  const values = [firstName, lastName, email];
+    const values = [firstName, lastName, email];
 
-  const result = await query(queryText, values);
+    const result = await query(queryText, values);
 
-  const returnMessage = result.rows[0];
-  res.status(201).json({message: returnMessage});
+    const returnMessage = result.rows[0];
+    res.status(201).json({message: returnMessage});
+  } catch (error) {
+    const castedError = error as Error;
+    if (castedError.message.includes('duplicate key value violates unique constraint')) {
+      // Handle duplicate email error
+      res.status(400).json({message: 'Email is already in use.'});
+    } else {
+      next(castedError);
+    }
+  }
 });
 
 //@desc get 1 user
