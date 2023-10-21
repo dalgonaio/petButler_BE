@@ -2,14 +2,26 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import {Pool, QueryConfig, QueryResult, QueryResultRow} from 'pg';
+const url = require('url');
+
+const params = url.parse(process.env.DB_URL);
+
+// Extract the individual components
+const auth = params.auth.split(':');
+const host = params.hostname;
+const port = params.port;
+const database = params.pathname.split('/')[1];
 
 //Initial connection
 const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_DATABASE,
-  password: process.env.DB_PASSWORD,
-  port: parseInt(process.env.DB_PORT || '5432', 10),
+  user: auth[0],
+  password: auth[1],
+  host: host,
+  port: port,
+  database: database,
+  ssl: {
+    rejectUnauthorized: false, // Only needed if your database requires SSL
+  },
 });
 
 export const query = async <T extends QueryResultRow = any>(
