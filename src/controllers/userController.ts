@@ -16,6 +16,7 @@ export const getUsers = asyncHandler(async (req: Request, res: Response) => {
 //@access public < Jungmee change this once you add authentication
 
 export const createUser = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  console.log('lupin check req:', req);
   const {firstName, lastName, email} = req.body;
 
   if (!firstName || !lastName || !email) {
