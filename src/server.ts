@@ -19,7 +19,8 @@ app.use(express.json());
 // Custom middleware to log requests
 const logMiddleware = (req: Request, res: Response, next: NextFunction) => {
   console.log(`Received a ${req.method} request at ${req.url}`);
-  console.log('Request body:', req.body); // Assuming you're using body-parser or similar middleware
+  console.log('Request body:', req.body);
+  console.log('Lupin', res);
   next();
 };
 
