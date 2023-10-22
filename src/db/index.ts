@@ -4,7 +4,7 @@ dotenv.config();
 import {Pool, QueryConfig, QueryResult, QueryResultRow} from 'pg';
 const url = require('url');
 
-const params = url.parse(process.env.DB_URL);
+const params = url.parse(process.env.DATABASE_URL);
 
 // Extract the individual components
 const auth = params.auth.split(':');
