@@ -16,24 +16,21 @@ export const getUsers = asyncHandler(async (req: Request, res: Response) => {
 //@access public < Jungmee change this once you add authentication
 
 export const createUser = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  console.log('lupin check req:', req.body);
-  const {firstName, lastName, email} = req.body;
+  const {firstName, lastName, email, auth0Id} = req.body;
 
   if (!firstName || !lastName || !email) {
-    console.log('lupin check1 triggered');
     res.status(400);
     throw new Error('All fields are mandatory to create a user.');
   }
 
   try {
-    const queryText = `INSERT INTO users (first_name, last_name, email)
-     VALUES ($1, $2, $3)
+    const queryText = `INSERT INTO users (first_name, last_name, email, auth0_sid)
+     VALUES ($1, $2, $3, $4)
      RETURNING *;`;
 
-    const values = [firstName, lastName, email];
+    const values = [firstName, lastName, email, auth0Id];
 
     const result = await query(queryText, values);
-    console.log('lupin2 result', result);
 
     const returnMessage = result.rows[0];
     res.status(201).json({message: returnMessage});
