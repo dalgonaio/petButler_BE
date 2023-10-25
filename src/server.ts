@@ -5,24 +5,16 @@ import {NextFunction, Request, Response} from 'express';
 
 import express from 'express';
 import cors from 'cors';
-const {auth} = require('express-oauth2-jwt-bearer');
 
 //Components
 import userRoutes from './routes/userRoutes';
 import {errorHandler} from './middleware/errorHandler';
+import {auth0Check} from './middleware/myAuth';
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 //AUTH
-const jwtCheck = auth({
-  audience: process.env.AUTH0_AUDIENCE,
-  issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
-  tokenSigningAlg: process.env.AUTH0_TOKEN,
-});
-
-//Lupin
-app.use(jwtCheck);
 
 //Middleware
 app.use(cors());
@@ -39,11 +31,23 @@ const logMiddleware = (req: Request, res: Response, next: NextFunction) => {
 // Other middleware
 app.use(logMiddleware);
 
+const isUserLoggedIn = (req: Request, res: Response, next: NextFunction) => {
+  if (req.body.user) {
+    // Valid user
+    next();
+  } else {
+    res.status(403).json({error: 'Unauthorized'});
+  }
+};
+
 //Routes
-app.use('/users/', userRoutes);
+app.use('/users/', userRoutes, isUserLoggedIn);
 
 //Error handler
 app.use(errorHandler);
+
+//Authenticate routes
+app.use(auth0Check);
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
