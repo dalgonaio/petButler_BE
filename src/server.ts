@@ -24,30 +24,21 @@ app.use(express.json());
 const logMiddleware = (req: Request, res: Response, next: NextFunction) => {
   console.log(`Received a ${req.method} request at ${req.url}`);
   console.log('Request body:', req.body);
-  console.log('Lupin', res);
+  // console.log('Lupin', res);
   next();
 };
 
 // Other middleware
 app.use(logMiddleware);
 
-const isUserLoggedIn = (req: Request, res: Response, next: NextFunction) => {
-  if (req.body.user) {
-    // Valid user
-    next();
-  } else {
-    res.status(403).json({error: 'Unauthorized'});
-  }
-};
+//Authenticate routes
+app.use(auth0Check);
 
 //Routes
-app.use('/users/', userRoutes, isUserLoggedIn);
+app.use('/users/', userRoutes);
 
 //Error handler
 app.use(errorHandler);
-
-//Authenticate routes
-app.use(auth0Check);
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
