@@ -14,7 +14,9 @@ if (db_URL) {
       rejectUnauthorized: false,
     },
   };
+  console.log('lupin check config>', config);
   db = new Pool(config);
+  console.log('lupin db>', db);
 } else {
   const config = {
     host: process.env.DB_HOST,
