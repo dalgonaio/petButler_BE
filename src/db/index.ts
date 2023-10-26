@@ -15,6 +15,9 @@ const db_URL = process.env.DATABASE_URL;
 console.log('lupin debug>', db_URL);
 if (db_URL) {
   const params = url.parse(process.env.DATABASE_URL);
+  console.log('lupin params', params);
+  console.log('lupin auth>', params.auth);
+  console.log('lupin path>', params.pathname);
   auth = (params.auth || []).split(':');
   host = params.hostname;
   port = params.port;
