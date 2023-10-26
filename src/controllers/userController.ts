@@ -100,6 +100,7 @@ export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
 
 export const getUserAuth0Id = asyncHandler(async (req: Request, res: Response) => {
   const auth0Id = req.params.id;
+  console.log('lupin get user hit>', auth0Id, req);
 
   const queryText = 'SELECT * FROM users WHERE auth0_sid = $1';
   const result = await query(queryText, [auth0Id]);
