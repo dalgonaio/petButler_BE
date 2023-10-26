@@ -12,6 +12,7 @@ let port = parseInt(process.env.DB_PORT || '5432', 10);
 let database = process.env.DB_DATABASE;
 
 const db_URL = process.env.DATABASE_URL;
+console.log('lupin debug>', db_URL);
 if (db_URL) {
   const params = url.parse(process.env.DATABASE_URL);
   auth = (params.auth || []).split(':');
