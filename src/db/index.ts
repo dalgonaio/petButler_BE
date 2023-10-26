@@ -5,6 +5,7 @@ import {Pool, QueryConfig, QueryResult, QueryResultRow} from 'pg';
 
 let db: Pool;
 const db_URL = process.env.DATABASE_URL;
+console.log('lupin db url', db_URL);
 
 if (db_URL) {
   const config = {
