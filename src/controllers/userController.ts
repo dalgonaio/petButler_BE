@@ -104,5 +104,6 @@ export const getUserAuth0Id = asyncHandler(async (req: Request, res: Response) =
 
   const queryText = 'SELECT * FROM users WHERE auth0_sid = $1';
   const result = await query(queryText, [auth0Id]);
+  console.log('lupin result>', result);
   res.status(200).json({message: result.rows[0]});
 });
