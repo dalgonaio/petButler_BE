@@ -24,6 +24,16 @@ app.use(
     credentials: true,
   })
 );
+
+// Enable CORS for all routes
+app.use((req, res, next) => {
+  //Jungmee to update frontend url if hosted on heroku
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
+
 app.use(express.json());
 
 // Custom middleware to log requests
