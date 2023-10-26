@@ -32,10 +32,10 @@ const logMiddleware = (req: Request, res: Response, next: NextFunction) => {
 app.use(logMiddleware);
 
 //Auth0 Register users using an unprotected route as M2M rules on Auth0 is expensive
-// app.post('/newAuth0User/', createUser);
+app.post('/newAuth0User/', createUser);
 
 //All other routes authenticated
-// app.use(auth0Check);
+app.use(auth0Check);
 
 //Routes
 app.use('/users/', userRoutes);
