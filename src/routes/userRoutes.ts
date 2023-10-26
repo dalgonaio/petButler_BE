@@ -6,7 +6,7 @@ import {
   getSingleUser,
   editUser,
   deleteUser,
-  checkUserAuth0Id,
+  getUserAuth0Id,
 } from '../controllers/userController';
 
 //Get all
@@ -16,6 +16,6 @@ router.route('/').get(getUsers).post(createUser);
 router.route('/:id').get(getSingleUser).put(editUser).delete(deleteUser);
 
 //Get specific user by auth0 id
-router.route('/check/:id').get(checkUserAuth0Id);
+router.route('/check/:id').get(getUserAuth0Id);
 
 export default router;

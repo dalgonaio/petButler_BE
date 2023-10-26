@@ -10,6 +10,7 @@ import cors from 'cors';
 import userRoutes from './routes/userRoutes';
 import {errorHandler} from './middleware/errorHandler';
 import {auth0Check} from './middleware/myAuth';
+import {createUser} from './controllers/userController';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -24,14 +25,16 @@ app.use(express.json());
 const logMiddleware = (req: Request, res: Response, next: NextFunction) => {
   console.log(`Received a ${req.method} request at ${req.url}`);
   console.log('Request body:', req.body);
-  // console.log('Lupin', res);
   next();
 };
 
 // Other middleware
 app.use(logMiddleware);
 
-//Authenticate routes
+//Auth0 Register users using an unprotected route as M2M rules on Auth0 is expensive
+app.post('/newAuth0User/', createUser);
+
+//All other routes authenticated
 app.use(auth0Check);
 
 //Routes

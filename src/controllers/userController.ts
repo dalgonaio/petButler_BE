@@ -4,7 +4,6 @@ import {query} from '../db';
 
 //@desc Get all users
 //@route GET /users
-//@access public < Jungmee change this once you add authentication
 
 export const getUsers = asyncHandler(async (req: Request, res: Response) => {
   const result = await query('SELECT * FROM users');
@@ -13,10 +12,13 @@ export const getUsers = asyncHandler(async (req: Request, res: Response) => {
 
 //@desc create 1 new user
 //@route POST /users/
-//@access public < Jungmee change this once you add authentication
 
 export const createUser = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const {firstName, lastName, email, auth0Id} = req.body;
+  console.log('lupin hit body>', req.body);
+
+  //Remove "auth0|" from auth0Id
+  const formattedAuth0Id = auth0Id.slice(7);
 
   if (!firstName || !lastName || !email) {
     res.status(400);
@@ -28,7 +30,7 @@ export const createUser = asyncHandler(async (req: Request, res: Response, next:
      VALUES ($1, $2, $3, $4)
      RETURNING *;`;
 
-    const values = [firstName, lastName, email, auth0Id];
+    const values = [firstName, lastName, email, formattedAuth0Id];
 
     const result = await query(queryText, values);
 
@@ -47,7 +49,6 @@ export const createUser = asyncHandler(async (req: Request, res: Response, next:
 
 //@desc get 1 user
 //@route GET /users/:id
-//@access public < Jungmee change this once you add authentication
 
 export const getSingleUser = async (req: Request, res: Response) => {
   const id = Number(req.params.id);
@@ -58,7 +59,6 @@ export const getSingleUser = async (req: Request, res: Response) => {
 
 //@desc edit 1 existing user
 //@route PUT /users/:id
-//@access public < Jungmee change this once you add authentication
 
 export const editUser = asyncHandler(async (req: Request, res: Response) => {
   const {firstName, lastName, email} = req.body;
@@ -83,7 +83,6 @@ export const editUser = asyncHandler(async (req: Request, res: Response) => {
 
 //@desc delete 1 existing user
 //@route DELETE /users/:id
-//@access public < Jungmee change this once you add authentication
 
 export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
   const id = Number(req.params.id);
@@ -99,9 +98,8 @@ export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
 
 //@desc check if user with Auth0 Id exists
 //@route GET /users/check/:auth0Id
-//@access public < Jungmee change this once you add authentication
 
-export const checkUserAuth0Id = asyncHandler(async (req: Request, res: Response) => {
+export const getUserAuth0Id = asyncHandler(async (req: Request, res: Response) => {
   const auth0Id = req.params.id;
 
   const queryText = 'SELECT * FROM users WHERE auth0_sid = $1';
