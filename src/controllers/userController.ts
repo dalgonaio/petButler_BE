@@ -15,7 +15,6 @@ export const getUsers = asyncHandler(async (req: Request, res: Response) => {
 
 export const createUser = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const {firstName, lastName, email, auth0Id} = req.body;
-  console.log('lupin hit body>', req.body);
 
   //Remove "auth0|" from auth0Id
   const formattedAuth0Id = auth0Id.slice(7);
