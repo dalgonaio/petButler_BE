@@ -35,7 +35,7 @@ app.use(logMiddleware);
 app.post('/newAuth0User/', createUser);
 
 //All other routes authenticated
-app.use(auth0Check);
+// app.use(auth0Check);
 
 //Routes
 app.use('/users/', userRoutes);
