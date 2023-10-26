@@ -15,7 +15,6 @@ if (db_URL) {
   };
   db = new Pool(config);
 } else {
-  //Initial connection
   const config = {
     host: process.env.DB_HOST,
     port: parseInt(process.env.DB_PORT || '5432', 10),
