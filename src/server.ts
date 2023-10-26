@@ -18,7 +18,11 @@ const port = process.env.PORT || 3000;
 //AUTH
 
 //Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: 'http://localhost:3001',
+  })
+);
 app.use(express.json());
 
 // Custom middleware to log requests
