@@ -14,10 +14,10 @@ let database = process.env.DB_DATABASE;
 const db_URL = process.env.DATABASE_URL;
 if (db_URL) {
   const params = url.parse(process.env.DATABASE_URL);
-  auth = params.auth.split(':');
+  auth = (params.auth || []).split(':');
   host = params.hostname;
   port = params.port;
-  database = params.pathname.split('/')[1];
+  database = (params.pathname || []).split('/')[1];
 }
 
 //Initial connection
