@@ -6,8 +6,12 @@ import {query} from '../db';
 //@route GET /users
 
 export const getUsers = asyncHandler(async (req: Request, res: Response) => {
-  const result = await query('SELECT * FROM users');
-  res.status(200).json(result.rows);
+  try {
+    const result = await query('SELECT * FROM users');
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 //@desc create 1 new user
