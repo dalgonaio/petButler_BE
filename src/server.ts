@@ -15,7 +15,7 @@ import {createUser} from './controllers/userController';
 const app = express();
 const port = process.env.PORT || 3000;
 
-const IP = 'https://pet-butler-be-6b33626d70a0.herokuapp.com/'
+const IP = 'http://localhost'
 var allowlist = [IP + ':3000', IP + ':3001', IP + ':3002', IP + ':3003']
 var corsOptionsDelegate = function (req:any, callback:any) {
   var corsOptions;
@@ -49,7 +49,7 @@ const logMiddleware = (req: Request, res: Response, next: NextFunction) => {
 
 // Other middleware
 app.use(logMiddleware);
-app.get('/', (req, res) => res.status(200).send("hello from server"))
+app.get('/', (req, res) => res.status(200).send("hello from server2"))
 //Auth0 Register users using an unprotected route as M2M rules on Auth0 is expensive
 app.post('/newAuth0User/', createUser);
 
