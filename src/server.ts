@@ -49,12 +49,12 @@ const logMiddleware = (req: Request, res: Response, next: NextFunction) => {
 
 // Other middleware
 app.use(logMiddleware);
-app.get('/', (req, res) => res.status(200).send("hello from server2"))
+app.get('/', (req, res) => res.status(200).send("hello from server3"))
 //Auth0 Register users using an unprotected route as M2M rules on Auth0 is expensive
 app.post('/newAuth0User/', createUser);
 
 //All other routes authenticated
-app.use(auth0Check);
+// app.use(auth0Check);
 
 //Routes
 app.use('/users/', userRoutes);
