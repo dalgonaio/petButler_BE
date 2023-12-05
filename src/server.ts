@@ -15,24 +15,28 @@ import {createUser} from './controllers/userController';
 const app = express();
 const port = process.env.PORT || 3000;
 
-//AUTH
+const IP = 'https://pet-butler-be-6b33626d70a0.herokuapp.com/'
+var allowlist = [IP + ':3000', IP + ':3001', IP + ':3002', IP + ':3003']
+var corsOptionsDelegate = function (req:any, callback:any) {
+  var corsOptions;
+  if (allowlist.indexOf(req.header('Origin')) !== -1) {
+    corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
+  } else {
+    corsOptions = { origin: false } // disable CORS for this request
+  }
+  callback(null, corsOptions) // callback expects two parameters: error and options
+}
 
-//Middleware
-app.use(
-  cors({
-    origin: '*',
-    credentials: true,
-  })
-);
-
-// Enable CORS for all routes
-app.use((req, res, next) => {
-  //Jungmee to update frontend url if hosted on heroku
-  res.setHeader('Access-Control-Allow-Origin', 'https://pet-butler-be-6b33626d70a0.herokuapp.com/');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Credentials', "true");
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
   next();
 });
+app.use(cors(corsOptionsDelegate));
 
 app.use(express.json());
 
@@ -45,7 +49,7 @@ const logMiddleware = (req: Request, res: Response, next: NextFunction) => {
 
 // Other middleware
 app.use(logMiddleware);
-
+app.get('/', (req, res) => res.status(200).send("hello from server"))
 //Auth0 Register users using an unprotected route as M2M rules on Auth0 is expensive
 app.post('/newAuth0User/', createUser);
 
