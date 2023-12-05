@@ -15,7 +15,7 @@ import {createUser} from './controllers/userController';
 const app = express();
 const port = process.env.PORT || 3000;
 
-const IP = 'http://localhst'
+const IP = 'http://localhost'
 var allowlist = [IP + ':3000', IP + ':3001', IP + ':3002', IP + ':3003']
 var corsOptionsDelegate = function (req:any, callback:any) {
   var corsOptions;
