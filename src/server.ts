@@ -55,9 +55,15 @@ app.post('/newAuth0User/', createUser);
 
 //All other routes authenticated
 // app.use(auth0Check);
+import {query} from './db';
 
 //Routes
 app.use('/users/', userRoutes);
+app.get('/getUsers', (req, res) => {
+  const result = query('SELECT * FROM users').then(result => {
+    res.status(200).json(result.rows);
+  });
+})
 
 //Error handler
 app.use(errorHandler);
