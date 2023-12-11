@@ -8,6 +8,7 @@ import cors from 'cors';
 
 //Components
 import userRoutes from './routes/userRoutes';
+import petRoutes from './routes/petRoutes';
 import {errorHandler} from './middleware/errorHandler';
 import {auth0Check} from './middleware/myAuth';
 import {createUser} from './controllers/userController';
@@ -52,13 +53,13 @@ app.post('/newAuth0User/', createUser);
 
 //All other routes authenticated
 // app.use(auth0Check);
-import {query} from './db';
 
 //Routes
 app.use('/users/', userRoutes);
 app.get('/getUsers', (req, res) => {
   res.send('some users from database');
 });
+app.use('/pets/', petRoutes);
 
 //Error handler
 app.use(errorHandler);
