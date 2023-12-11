@@ -21,7 +21,7 @@ export const createUser = asyncHandler(async (req: Request, res: Response, next:
   const {firstName, lastName, email, auth0Id} = req.body;
 
   //Remove "auth0|" from auth0Id
-  const formattedAuth0Id = auth0Id.slice(7);
+  const formattedAuth0Id = auth0Id.slice(6);
 
   if (!firstName || !lastName || !email) {
     res.status(400);
