@@ -45,6 +45,7 @@ export const addPet = asyncHandler(async (req: Request, res: Response, next: Nex
     imageUrl = '',
   } = req.body;
 
+  console.log('lupin check req.params', req.params);
   const butlerId = Number(req.params.butlerId);
   if (!petName || !petType || butlerId) {
     res.status(400);
