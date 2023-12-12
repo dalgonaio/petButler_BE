@@ -64,6 +64,7 @@ export const addPet = asyncHandler(async (req: Request, res: Response, next: Nex
     const returnMessage = result.rows[0];
     res.status(201).json({message: returnMessage});
   } catch (error) {
+    console.log('lupin error>', error);
     const castedError = error as Error;
     next(castedError);
   }
