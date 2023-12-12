@@ -18,14 +18,18 @@ export const allPets = asyncHandler(async (req: Request, res: Response) => {
 
 export const getPets = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const {butlerId} = req.body;
+    const butlerId = req.params.butlerId;
+    console.log('lupin getpets hit,', butlerId);
 
-    const queryText = `SELECT pet.*
+    const queryText = `
+    SELECT pets.*
     FROM pets
-    JOIN users ON pet.user_id = users.user_id
-    WHERE users.user_id = $1;`;
+    JOIN users ON pets.auth0_sid = users.auth0_sid
+    WHERE users.auth0_sid = $1;
+  `;
     const result = await query(queryText, [butlerId]);
-    res.status(200).json({message: result.rows[0]});
+
+    res.status(200).json({message: result.rows});
   } catch (error) {
     console.log(error);
   }
