@@ -32,7 +32,7 @@ export const getPets = asyncHandler(async (req: Request, res: Response) => {
 });
 
 //@desc add 1 new pet
-//@route POST /pets/:userId
+//@route POST /pets/:butlerId
 
 export const addPet = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const {
@@ -45,7 +45,7 @@ export const addPet = asyncHandler(async (req: Request, res: Response, next: Nex
     imageUrl = '',
   } = req.body;
 
-  const butlerId = Number(req.params.id);
+  const butlerId = Number(req.params.butlerId);
   if (!petName || !petType || butlerId) {
     res.status(400);
     throw new Error('Pet name and type are necessary to create a pet profile.');
