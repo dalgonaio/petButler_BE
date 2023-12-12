@@ -53,8 +53,7 @@ export const addPet = asyncHandler(async (req: Request, res: Response, next: Nex
   }
 
   try {
-    console.log('Add a pet hit, butler id', butlerId);
-    const queryText = `INSERT INTO pets (pet_name, rfid_chip_id, pet_type, breed, date_of_birth, gender, image_url, user_id)
+    const queryText = `INSERT INTO pets (pet_name, rfid_chip_id, pet_type, breed, date_of_birth, gender, image_url, auth0_sid)
      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
      RETURNING *;`;
 
