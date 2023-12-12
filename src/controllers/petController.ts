@@ -43,10 +43,10 @@ export const addPet = asyncHandler(async (req: Request, res: Response, next: Nex
     dob = 20231225,
     gender = 'Male',
     imageUrl = '',
-    butlerId,
   } = req.body;
 
-  if (!petName || !petType) {
+  const butlerId = Number(req.params.id);
+  if (!petName || !petType || butlerId) {
     res.status(400);
     throw new Error('Pet name and type are necessary to create a pet profile.');
   }
