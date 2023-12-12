@@ -52,6 +52,7 @@ export const addPet = asyncHandler(async (req: Request, res: Response, next: Nex
   }
 
   try {
+    console.log('Add a pet hit');
     const queryText = `INSERT INTO Pets ('pet_name', 'rfid_chip_id', 'pet_type', 'breed', 'date_of_birth', 'gender', 'image_url', 'user_id')
      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
      RETURNING *;`;
@@ -59,7 +60,7 @@ export const addPet = asyncHandler(async (req: Request, res: Response, next: Nex
     const values = [petName, rfid, petType, breed, dob, gender, imageUrl, butlerId];
 
     const result = await query(queryText, values);
-
+    console.log('lupin result from add pet', result);
     const returnMessage = result.rows[0];
     res.status(201).json({message: returnMessage});
   } catch (error) {
