@@ -45,8 +45,7 @@ export const addPet = asyncHandler(async (req: Request, res: Response, next: Nex
     imageUrl = '',
   } = req.body;
 
-  console.log('lupin check req.params', req.params);
-  const butlerId = Number(req.params.butlerId);
+  const butlerId = req.params.butlerId;
   if (!petName || !petType || butlerId) {
     res.status(400);
     throw new Error('Pet name and type are necessary to create a pet profile.');
