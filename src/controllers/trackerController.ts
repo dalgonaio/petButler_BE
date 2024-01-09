@@ -85,37 +85,45 @@ export const getSingleDateEntries = async (req: Request, res: Response) => {
 //@desc edit 1 diary entry
 //@route PUT /petFood/:diaryId
 
-export const editOneFoodEntry = asyncHandler(async (req: Request, res: Response) => {
-  const {
-    foodType = '',
-    foodBrand = '',
-    portionSize = 1,
-    caloriesPerPortion = 0,
-    portionsConsumed,
-  } = req.body;
+export const editOneFoodEntry = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const {
+      foodType = '',
+      foodBrand = '',
+      portionSize = 1,
+      caloriesPerPortion = 0,
+      portionsConsumed,
+    } = req.body;
 
-  const diaryId = Number(req.params.diaryId);
-  const totalCalories = caloriesPerPortion * portionsConsumed;
+    const diaryId = Number(req.params.diaryId);
+    const totalCalories = caloriesPerPortion * portionsConsumed;
 
-  const queryText = `
-      UPDATE pets_food
-      SET food_type = $1, food_brand = $2, portion_size = $3, portions_consumed =$4, calories_per_portion = $5, total_calories_consumed = $6
-      WHERE intake_id = $7
-      RETURNING *;
-    `;
+    try {
+      const queryText = `
+  UPDATE pets_food
+  SET food_type = $1, food_brand = $2, portion_size = $3, portions_consumed =$4, calories_per_portion = $5, total_calories_consumed = $6
+  WHERE intake_id = $7
+  RETURNING *;
+`;
 
-  const result = await query(queryText, [
-    foodType,
-    foodBrand,
-    portionSize,
-    portionsConsumed,
-    caloriesPerPortion,
-    totalCalories,
-    diaryId,
-  ]);
+      const result = await query(queryText, [
+        foodType,
+        foodBrand,
+        portionSize,
+        portionsConsumed,
+        caloriesPerPortion,
+        totalCalories,
+        diaryId,
+      ]);
 
-  res.status(200).json({message: result.rows[0]});
-});
+      res.status(200).json({message: result.rows[0]});
+    } catch (error) {
+      console.log('lupin edit 1 diary entry error>', error);
+      const castedError = error as Error;
+      next(castedError);
+    }
+  }
+);
 
 //@desc delete 1 entry
 //@route DELETE /petFood/:diaryId
