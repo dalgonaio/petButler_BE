@@ -9,6 +9,7 @@ import cors from 'cors';
 //Components
 import userRoutes from './routes/userRoutes';
 import petRoutes from './routes/petRoutes';
+import trackerRoutes from './routes/trackerRoutes';
 import {errorHandler} from './middleware/errorHandler';
 import {auth0Check} from './middleware/myAuth';
 import {createUser} from './controllers/userController';
@@ -60,6 +61,7 @@ app.get('/getUsers', (req, res) => {
   res.send('some users from database');
 });
 app.use('/pets/', petRoutes);
+app.use('/petFood/', trackerRoutes);
 
 //Error handler
 app.use(errorHandler);
