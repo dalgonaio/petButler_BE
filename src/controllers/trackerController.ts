@@ -48,7 +48,7 @@ export const addFoodEntry = asyncHandler(
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING *;`;
 
-      const totalCalories = portionsConsumed * caloriesPerPortion;
+      const totalCalories = Number(portionsConsumed) * Number(caloriesPerPortion);
       const values = [
         date,
         petId,
@@ -72,14 +72,24 @@ export const addFoodEntry = asyncHandler(
 );
 
 //@desc get all entries for 1 date
-//@route GET /petFood/:petId
+//@route GET /petFood/:petId/:date
 
 export const getSingleDateEntries = async (req: Request, res: Response) => {
-  const petId = Number(req.params.id);
-  const date = req.body;
+  const petId = Number(req.params.petId);
+  const date = Number(req.params.date);
   const queryText = 'SELECT * FROM pets_food WHERE pet_id = $1 AND intake_date_time = $2';
   const result = await query(queryText, [petId, date]);
-  res.status(200).json({message: result.rows});
+  const dayEntries = await result?.rows;
+
+  //Format day entries
+  const totalCaloriesToday: Record<string, Number> = {};
+  dayEntries?.forEach((data) => {
+    const name = data?.food_brand.toUpperCase();
+    const currCalories = totalCaloriesToday[name] || 0;
+    totalCaloriesToday[name] = currCalories + data?.total_calories_consumed;
+  });
+
+  res.status(200).json({message: totalCaloriesToday});
 };
 
 //@desc edit 1 diary entry
@@ -96,7 +106,7 @@ export const editOneFoodEntry = asyncHandler(
     } = req.body;
 
     const diaryId = Number(req.params.diaryId);
-    const totalCalories = caloriesPerPortion * portionsConsumed;
+    const totalCalories = Number(portionsConsumed) * Number(caloriesPerPortion);
 
     try {
       const queryText = `
