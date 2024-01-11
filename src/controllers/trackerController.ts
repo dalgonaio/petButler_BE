@@ -89,9 +89,8 @@ export const getSingleDateEntries = async (req: Request, res: Response) => {
     totalCaloriesToday[name] = currCalories + data?.total_calories_consumed;
   });
   const foodNames = Object.keys(totalCaloriesToday);
-  totalCaloriesToday['foods'] = foodNames;
 
-  res.status(200).json({message: totalCaloriesToday});
+  res.status(200).json({message: {calorieData: totalCaloriesToday, names: foodNames}});
 };
 
 //@desc edit 1 diary entry
