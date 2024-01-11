@@ -82,12 +82,14 @@ export const getSingleDateEntries = async (req: Request, res: Response) => {
   const dayEntries = await result?.rows;
 
   //Format day entries
-  const totalCaloriesToday: Record<string, Number> = {};
+  const totalCaloriesToday: Record<string, Number | string[]> = {};
   dayEntries?.forEach((data) => {
     const name = data?.food_brand.toUpperCase();
     const currCalories = totalCaloriesToday[name] || 0;
     totalCaloriesToday[name] = currCalories + data?.total_calories_consumed;
   });
+  const foodNames = Object.keys(totalCaloriesToday);
+  totalCaloriesToday['foods'] = foodNames;
 
   res.status(200).json({message: totalCaloriesToday});
 };
